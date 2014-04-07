@@ -34,6 +34,13 @@
 		</dependency>
 	</dependencies>
 
+	<scm>
+		<connection>scm:git:git://github.com/fiji/Bug_Submitter</connection>
+		<developerConnection>scm:git:git@github.com:fiji/Bug_Submitter</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/fiji/Bug_Submitter</url>
+	</scm>
+
 	<repositories>
 		<!-- NB: for project parent, in case of partial checkout -->
 		<repository>
