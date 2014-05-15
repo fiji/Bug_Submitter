@@ -25,13 +25,8 @@
 		</dependency>
 		<dependency>
 			<groupId>net.imagej</groupId>
-			<artifactId>ij-updater-core</artifactId>
-			<version>${imagej.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.imagej</groupId>
-			<artifactId>ij-ui-swing-updater</artifactId>
-			<version>${imagej.version}</version>
+			<artifactId>imagej-updater</artifactId>
+			<version>0.2.0</version>
 		</dependency>
 	</dependencies>
 

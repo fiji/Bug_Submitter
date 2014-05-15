@@ -29,11 +29,6 @@ import ij.gui.GUI;
 import ij.plugin.BrowserLauncher;
 import ij.plugin.PlugIn;
 import ij.text.TextWindow;
-import imagej.updater.core.FilesCollection;
-import imagej.updater.core.UpToDate;
-import imagej.updater.gui.ProgressDialog;
-import imagej.updater.util.Progress;
-import imagej.updater.util.StderrProgress;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -44,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -56,6 +52,10 @@ import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
+
+import net.imagej.updater.FilesCollection;
+import net.imagej.updater.UpToDate;
+import net.imagej.updater.util.StderrProgress;
 
 /**
  * A plugin for reporting bugs to Fiji's BugZilla bug tracker.
@@ -357,21 +357,13 @@ public class Bug_Submitter implements PlugIn {
 	@Override
 	public void run( String ignore ) {
 
-		String check;
+		String systemInfo;
 		try {
-			check = UpToDate.check().toString();
-		} catch (Exception e) {
-			check = e.getMessage();
+			systemInfo = new ModernUpdater().toString();
+		} catch (Throwable e) {
+			e.printStackTrace();
+			systemInfo = new LegacyUpdater().toString();
 		}
-		final Progress progress = IJ.getInstance() == null ?
-				new ProgressDialog(null) : new StderrProgress();
-		String systemInfo = "Information about your version of Java:\n\n"+
-			getUsefulSystemInformation()+
-			"\nThe up-to-date check says: " + check + "\n"+
-			"\nInformation relevant to JAVA_HOME related problems:\n\n"+
-			getPathInformation()+
-			"\n\nInformation about the version of each plugin:\n\n"+
-			FilesCollection.getInstalledVersions(new File(System.getProperty("ij.dir")), progress);
 
 		while( true ) {
 
@@ -434,6 +426,75 @@ public class Bug_Submitter implements PlugIn {
 				IJ.error("[BUG] Unknown return code: "+result.resultCode);
 				return;
 			}
+		}
+	}
+
+	/**
+	 * Encapsulates the modern updater (so that version skew can be handled via
+	 * {@code catch (Throwable)}).
+	 */
+	private class ModernUpdater {
+		public String toString() {
+			String check;
+			try {
+				check = UpToDate.check().toString();
+			} catch (Exception e) {
+				check = e.getMessage();
+			}
+			final StderrProgress progress = new StderrProgress();
+			return "Information about your version of Java:\n\n"
+					+ getUsefulSystemInformation()
+					+ "\nThe up-to-date check says: "
+					+ check
+					+ "\n"
+					+ "\nInformation relevant to JAVA_HOME related problems:\n\n"
+					+ getPathInformation()
+					+ "\n\nInformation about the version of each plugin:\n\n"
+					+ FilesCollection.getInstalledVersions(
+							new File(System.getProperty("ij.dir")), progress);
+		}
+	}
+
+	/**
+	 * Encapsulates the previous updater (so that we can fall back in case of
+	 * version skew).
+	 */
+	private class LegacyUpdater {
+		public String toString() {
+			final StringBuilder builder = new StringBuilder();
+			builder.append("Information about your version of Java:\n\n");
+			builder.append(getUsefulSystemInformation());
+			builder.append("\nThe up-to-date check says: ");
+			final ClassLoader loader = getClass().getClassLoader();
+			try {
+				final Class<?> upToDateClass = loader
+						.loadClass("imagej.updater.core.UpToDate");
+				final Method check = upToDateClass.getMethod("check");
+				builder.append(check.invoke(null).toString());
+			} catch (Throwable e) {
+				builder.append(e.getMessage());
+			}
+			builder.append("\n\nInformation relevant to JAVA_HOME related problems:\n\n");
+			builder.append(getPathInformation());
+			builder.append("\n\nInformation about the version of each plugin:\n\n");
+			try {
+				final Class<?> filesCollectionClass = loader
+						.loadClass("imagej.updater.core.FilesCollection");
+				final Class<?> progressClass = loader
+						.loadClass("imagej.updater.util.Progress");
+				final Method getInstalledVersions = filesCollectionClass
+						.getMethod("getInstalledVersions", File.class,
+								progressClass);
+				String ijDir = System.getProperty("imagej.dir");
+				if (ijDir == null) {
+					ijDir = System.getProperty("ij.dir");
+				}
+				builder.append(getInstalledVersions.invoke(null,
+						new File(ijDir), null).toString());
+			} catch (Throwable e) {
+				builder.append(e.getMessage());
+			}
+			return builder.toString();
 		}
 	}
 
