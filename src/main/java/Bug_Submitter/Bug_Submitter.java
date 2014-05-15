@@ -144,8 +144,8 @@ public class Bug_Submitter implements PlugIn {
 		StringBuffer sb = new StringBuffer();
 		sb.append("  JAVA_HOME is set to: ");
 		sb.append(System.getenv("JAVA_HOME"));
-		sb.append("\n  ij.dir => ");
-		sb.append(System.getProperty("ij.dir"));
+		sb.append("\n  imagej.dir => ");
+		sb.append(System.getProperty("imagej.dir"));
 		return sb.toString();
 	}
 
@@ -442,6 +442,10 @@ public class Bug_Submitter implements PlugIn {
 				check = e.getMessage();
 			}
 			final StderrProgress progress = new StderrProgress();
+			String ijDirProperty = System.getProperty("imagej.dir");
+			if (ijDirProperty == null) {
+				ijDirProperty = System.getProperty("ij.dir");
+			}
 			return "Information about your version of Java:\n\n"
 					+ getUsefulSystemInformation()
 					+ "\nThe up-to-date check says: "
@@ -451,7 +455,7 @@ public class Bug_Submitter implements PlugIn {
 					+ getPathInformation()
 					+ "\n\nInformation about the version of each plugin:\n\n"
 					+ FilesCollection.getInstalledVersions(
-							new File(System.getProperty("ij.dir")), progress);
+							new File(ijDirProperty), progress);
 		}
 	}
 
