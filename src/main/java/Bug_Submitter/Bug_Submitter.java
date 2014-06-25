@@ -376,7 +376,7 @@ public class Bug_Submitter implements PlugIn {
 			suggestedUsername, suggestedPassword, systemInfo);
 
 		while( true ) {
-
+			dialog.resetForm();
 			GUI.center(dialog);
 			dialog.show();
 
