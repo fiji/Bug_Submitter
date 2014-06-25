@@ -365,17 +365,18 @@ public class Bug_Submitter implements PlugIn {
 			systemInfo = new LegacyUpdater().toString();
 		}
 
+		String suggestedUsername = Prefs.get(usernamePreferenceKey,"");
+		String suggestedPassword = Prefs.get(passwordPreferenceKey,null);
+		if( suggestedPassword == null || suggestedPassword.length() == 0 )
+			suggestedPassword = null;
+		else
+			suggestedPassword = rot13( suggestedPassword );
+
+		NewBugDialog dialog = new NewBugDialog( this,
+			suggestedUsername, suggestedPassword, systemInfo);
+
 		while( true ) {
 
-			String suggestedUsername = Prefs.get(usernamePreferenceKey,"");
-			String suggestedPassword = Prefs.get(passwordPreferenceKey,null);
-			if( suggestedPassword == null || suggestedPassword.length() == 0 )
-				suggestedPassword = null;
-			else
-				suggestedPassword = rot13( suggestedPassword );
-
-			NewBugDialog dialog = new NewBugDialog( this,
-				suggestedUsername, suggestedPassword, systemInfo);
 			GUI.center(dialog);
 			dialog.show();
 
