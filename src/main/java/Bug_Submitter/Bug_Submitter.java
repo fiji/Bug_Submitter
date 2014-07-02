@@ -64,8 +64,6 @@ import net.imagej.updater.util.StderrProgress;
  */
 public class Bug_Submitter implements PlugIn {
 
-	protected String bugzillaAssignee = "fiji-devel@googlegroups.com";
-
 	public String e( String original ) {
 		try {
 			return URLEncoder.encode(original,"UTF-8");
@@ -286,8 +284,7 @@ public class Bug_Submitter implements PlugIn {
 				   "&version=unspecified"+
 				   "&bug_file_loc="+e("http://")+
 				   "&bug_status=NEW"+
-				   "&assigned_to="+e(bugzillaAssignee)+
-				   ccString+
+				   "&assigned_to="+ccString+
 				   "&estimated_time="+
 				   "&deadline="+
 				   "&short_desc="+e(bugSubject)+
