@@ -31,6 +31,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -40,6 +41,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -81,6 +84,9 @@ class NewBugDialog extends JFrame implements ActionListener, WindowListener {
 	JTextArea description;
 	JTextArea systemInfo;
 	UndoManager undo;
+
+	private final static String BEST_PRACTICES_URL =
+		"http://fiji.sc/Bug_reporting_best_practices";
 
 	/**
 	 * Helper class for resetting a component's background color after a
@@ -331,7 +337,19 @@ new SimpleEditListener());
 		}
 
 		++ c.gridy;
-		contentPane.add( new JLabel("A full description of the bug:"), c );
+		final JLabel descriptionLabel = new JLabel("<html><div width=500px>A full description of the bug (if you are able to, provide a minimal macro that reproduces the issue; feel free to upload – as small as possible – images via Help>Upload Sample Image to help those you ask for help to reproduce the problem, see also <a href='" + BEST_PRACTICES_URL + "'>best bug reporting practices</a>):</div></html>");
+		descriptionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		descriptionLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(final MouseEvent e) {
+				try {
+					BrowserLauncher.openURL(BEST_PRACTICES_URL);
+				} catch (Throwable t) {
+					IJ.handleException(t);
+				}
+			}
+		});
+		contentPane.add(descriptionLabel , c );
 
 		++ c.gridy;
 		c.fill = GridBagConstraints.BOTH;
