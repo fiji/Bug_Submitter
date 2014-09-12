@@ -57,6 +57,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CannotRedoException;
@@ -189,6 +190,15 @@ class NewBugDialog extends JFrame implements ActionListener, WindowListener {
 
 	@Override
 	public synchronized void dispose() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					dispose();
+				}
+			});
+			return;
+		}
 		WindowManager.removeWindow(this);
 		notify();
 		super.dispose();
