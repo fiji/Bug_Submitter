@@ -15,6 +15,25 @@
 	<name>plugins/Bug_Submitter.jar</name>
 	<description />
 
+	<scm>
+		<connection>scm:git:git://github.com/fiji/Bug_Submitter</connection>
+		<developerConnection>scm:git:git@github.com:fiji/Bug_Submitter</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/fiji/Bug_Submitter</url>
+	</scm>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://jenkins.imagej.net/job/Bug_Submitter/</url>
+	</ciManagement>
+
+	<repositories>
+		<!-- NB: for project parent -->
+		<repository>
+			<id>imagej.public</id>
+			<url>http://maven.imagej.net/content/groups/public</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<!-- ImageJ dependencies -->
 		<dependency>
@@ -26,25 +45,5 @@
 			<artifactId>imagej-updater</artifactId>
 		</dependency>
 	</dependencies>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>http://jenkins.imagej.net/job/Bug_Submitter/</url>
-	</ciManagement>
-
-	<scm>
-		<connection>scm:git:git://github.com/fiji/Bug_Submitter</connection>
-		<developerConnection>scm:git:git@github.com:fiji/Bug_Submitter</developerConnection>
-		<tag>HEAD</tag>
-		<url>https://github.com/fiji/Bug_Submitter</url>
-	</scm>
-
-	<repositories>
-		<!-- NB: for project parent -->
-		<repository>
-			<id>imagej.public</id>
-			<url>http://maven.imagej.net/content/groups/public</url>
-		</repository>
-	</repositories>
 
 </project>
