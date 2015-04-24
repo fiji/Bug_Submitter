@@ -173,6 +173,7 @@ public class Bug_Submitter implements PlugIn {
 		StringBuffer authenticationReply = new StringBuffer();
 
 		try {
+			// First connection to authenticate and select product.
 			URL url = new URL( bugzillaBaseURI + "enter_bug.cgi" );
 			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			connection.setDoInput(true);
@@ -208,6 +209,8 @@ public class Bug_Submitter implements PlugIn {
 							     submissionReply.toString() );
 			}
 
+			// Read the requested page to verify if we authenticated or not.
+			// Also gets the session token to use when creating the bug.
 			InputStream is = connection.getInputStream();
 			BufferedReader br = new BufferedReader( new InputStreamReader(is) );
 			String line = null;
@@ -234,6 +237,8 @@ public class Bug_Submitter implements PlugIn {
 			if( submitterEmail != null && submitterEmail.trim().length() > 0 )
 				ccString = "&cc="+e(submitterEmail.trim());
 
+			// Second URL connection to create the actual bug. Requires that we got a
+			// session token back in the previous connection!
 			url = new URL( bugzillaBaseURI + "post_bug.cgi" );
 			connection = (HttpURLConnection)url.openConnection();
 			connection.setDoInput(true);
