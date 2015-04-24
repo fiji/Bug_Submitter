@@ -232,6 +232,14 @@ public class Bug_Submitter implements PlugIn {
 							     authenticationReply.toString(),
 							     submissionReply.toString() );
 			}
+			// Fail if no token
+			else if (token.isEmpty()) {
+				IJ.error("No session token discovered after authentication. This " +
+					"version of Bug Submitter is not compatible with the current " +
+					"configuration of BugZilla.");
+				return new SubmissionResult(OTHER_FAILURE, -1, null,
+					authenticationReply.toString(), submissionReply.toString());
+			}
 
 			String ccString = "";
 			if( submitterEmail != null && submitterEmail.trim().length() > 0 )
