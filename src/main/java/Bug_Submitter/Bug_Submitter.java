@@ -183,7 +183,8 @@ public class Bug_Submitter implements PlugIn {
 			ps.println("Bugzilla_login="+e(submitterEmail)+
 				   "&Bugzilla_password="+e(submitterBugzillaPassword)+
 				   "&classification=__all"+
-				   "&GoAheadAndLogIn="+e("Log in"));
+				   "&GoAheadAndLogIn="+e("Log in")+
+				   "&product=Fiji");
 			ps.close();
 
 			// Get the cookies that were set:
