@@ -368,77 +368,79 @@ public class Bug_Submitter implements PlugIn {
 	@Override
 	public void run( String ignore ) {
 
-		String systemInfo;
-		try {
-			systemInfo = new ModernUpdater().toString();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			systemInfo = new LegacyUpdater().toString();
-		}
+		IJ.showMessage("Bug Submitter Temporarily Unavailable", "<html>This functionality is currently undergoing a redesign.<br />If you need immediate assistance please see the ImageJ Help resources at:<ul><li><a href=\"http://imagej.net/Help\">http://imagej.net/Help</a></li></ul>");
 
-		String suggestedUsername = Prefs.get(usernamePreferenceKey,"");
-		String suggestedPassword = Prefs.get(passwordPreferenceKey,null);
-		if( suggestedPassword == null || suggestedPassword.length() == 0 )
-			suggestedPassword = null;
-		else
-			suggestedPassword = rot13( suggestedPassword );
-
-		NewBugDialog dialog = new NewBugDialog( this,
-			suggestedUsername, suggestedPassword, systemInfo);
-
-		while( true ) {
-			dialog.resetForm();
-			GUI.center(dialog);
-			dialog.show();
-
-			if( ! dialog.askedToSubmit )
-				return;
-
-			String username = dialog.username.getText().trim();
-			Prefs.set( usernamePreferenceKey, username );
-			Prefs.savePreferences();
-
-			String password = new String(dialog.password.getPassword());
-			if( dialog.rememberPassword.isSelected() )
-				Prefs.set( passwordPreferenceKey, rot13(password) );
-			else
-				Prefs.set( passwordPreferenceKey, "" );
-			Prefs.savePreferences();
-
-			final String summary = dialog.summary.getText().trim();
-			final String description = dialog.description.getText().trim() +
-				"\n\n" + dialog.systemInfo.getText();
-
-			SubmissionResult result = submitBug( username, password, summary, description );
-
-			switch( result.resultCode ) {
-			case IOEXCEPTION_FAILURE:
-				IJ.error("There was a network failure while submitting your bug.\n"+
-					 "Please try again after checking you have internet connectivity.");
-				break;
-			case CC_UNKNOWN_FAILURE:
-				IJ.error("The user in the Cc: field was unknown.");
-				break;
-			case LOGIN_FAILURE:
-				IJ.error("The login failed: your username or password may be incorrect.");
-				break;
-			case OTHER_FAILURE:
-				new TextWindow( "Login Reply Page", result.authenticationResultPage, 640, 480 );
-				new TextWindow( "Submission Reply Page", result.submissionResultPage, 640, 480 );
-				IJ.error("Sorry - there was an unknown error while submitting your bug.\n"+
-					 "Please submit this as a bug manually, including the text from\nthe two windows which were just created.");
-				break;
-			case SUCCESS:
-				new BrowserLauncher().run(result.bugURL);
-				IJ.showMessage( "Bug Submitted", "Thank you!\n"+
-						"Your bug report was successfully submitted.\n"+
-						"(Your browser should now be launched with the bug report page.)" );
-				return;
-			default:
-				IJ.error("[BUG] Unknown return code: "+result.resultCode);
-				return;
-			}
-		}
+//		String systemInfo;
+//		try {
+//			systemInfo = new ModernUpdater().toString();
+//		} catch (Throwable e) {
+//			e.printStackTrace();
+//			systemInfo = new LegacyUpdater().toString();
+//		}
+//
+//		String suggestedUsername = Prefs.get(usernamePreferenceKey,"");
+//		String suggestedPassword = Prefs.get(passwordPreferenceKey,null);
+//		if( suggestedPassword == null || suggestedPassword.length() == 0 )
+//			suggestedPassword = null;
+//		else
+//			suggestedPassword = rot13( suggestedPassword );
+//
+//		NewBugDialog dialog = new NewBugDialog( this,
+//			suggestedUsername, suggestedPassword, systemInfo);
+//
+//		while( true ) {
+//			dialog.resetForm();
+//			GUI.center(dialog);
+//			dialog.show();
+//
+//			if( ! dialog.askedToSubmit )
+//				return;
+//
+//			String username = dialog.username.getText().trim();
+//			Prefs.set( usernamePreferenceKey, username );
+//			Prefs.savePreferences();
+//
+//			String password = new String(dialog.password.getPassword());
+//			if( dialog.rememberPassword.isSelected() )
+//				Prefs.set( passwordPreferenceKey, rot13(password) );
+//			else
+//				Prefs.set( passwordPreferenceKey, "" );
+//			Prefs.savePreferences();
+//
+//			final String summary = dialog.summary.getText().trim();
+//			final String description = dialog.description.getText().trim() +
+//				"\n\n" + dialog.systemInfo.getText();
+//
+//			SubmissionResult result = submitBug( username, password, summary, description );
+//
+//			switch( result.resultCode ) {
+//			case IOEXCEPTION_FAILURE:
+//				IJ.error("There was a network failure while submitting your bug.\n"+
+//					 "Please try again after checking you have internet connectivity.");
+//				break;
+//			case CC_UNKNOWN_FAILURE:
+//				IJ.error("The user in the Cc: field was unknown.");
+//				break;
+//			case LOGIN_FAILURE:
+//				IJ.error("The login failed: your username or password may be incorrect.");
+//				break;
+//			case OTHER_FAILURE:
+//				new TextWindow( "Login Reply Page", result.authenticationResultPage, 640, 480 );
+//				new TextWindow( "Submission Reply Page", result.submissionResultPage, 640, 480 );
+//				IJ.error("Sorry - there was an unknown error while submitting your bug.\n"+
+//					 "Please submit this as a bug manually, including the text from\nthe two windows which were just created.");
+//				break;
+//			case SUCCESS:
+//				new BrowserLauncher().run(result.bugURL);
+//				IJ.showMessage( "Bug Submitted", "Thank you!\n"+
+//						"Your bug report was successfully submitted.\n"+
+//						"(Your browser should now be launched with the bug report page.)" );
+//				return;
+//			default:
+//				IJ.error("[BUG] Unknown return code: "+result.resultCode);
+//				return;
+//			}
+//		}
 	}
 
 	/**
