@@ -65,6 +65,10 @@
 		<url>http://jenkins.imagej.net/job/Bug_Submitter/</url>
 	</ciManagement>
 
+	<properties>
+		<scijava.obsolete>true</scijava.obsolete>
+	</properties>
+
 	<repositories>
 		<!-- NB: for project parent -->
 		<repository>
