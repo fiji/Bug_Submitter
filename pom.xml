@@ -11,7 +11,7 @@
 
 	<groupId>sc.fiji</groupId>
 	<artifactId>Bug_Submitter</artifactId>
-	<version>2.1.1-SNAPSHOT</version>
+	<version>2.1.1</version>
 
 	<name>Bug Submitter</name>
 	<description>Bug Submitter plugin for Fiji.</description>
@@ -74,7 +74,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/fiji/Bug_Submitter</connection>
 		<developerConnection>scm:git:git@github.com:fiji/Bug_Submitter</developerConnection>
-		<tag>HEAD</tag>
+		<tag>Bug_Submitter-2.1.1</tag>
 		<url>https://github.com/fiji/Bug_Submitter</url>
 	</scm>
 	<issueManagement>
