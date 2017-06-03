@@ -15,7 +15,7 @@
 
 	<name>Bug Submitter</name>
 	<description>Bug Submitter plugin for Fiji.</description>
-	<url>https://imagej.net/Bug_Submitter</url>
+	<url>https://imagej.net/Report_a_Bug</url>
 	<inceptionYear>2009</inceptionYear>
 	<organization>
 		<name>Fiji</name>
