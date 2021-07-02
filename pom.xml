@@ -82,8 +82,8 @@
 		<url>https://github.com/fiji/Bug_Submitter/issues</url>
 	</issueManagement>
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.org/fiji/Bug_Submitter</url>
+		<system>GitHub Actions</system>
+		<url>https://github.com/fiji/Bug_Submitter/actions</url>
 	</ciManagement>
 
 	<properties>
@@ -94,7 +94,7 @@
 		<scijava.obsolete>true</scijava.obsolete>
 
 		<!-- NB: Deploy releases to the SciJava Maven repository. -->
-		<releaseProfiles>deploy-to-scijava</releaseProfiles>
+		<releaseProfiles>sign,deploy-to-scijava</releaseProfiles>
 	</properties>
 
 	<repositories>
